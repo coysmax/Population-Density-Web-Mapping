@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Washington COVID-19 Vaccination Rates by County</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        h1, h2, h3 {
+            margin: 10px;
+            font-size: 18px;
+        }
+
+        h1 {
+            font-size: 24px;
+            padding: 20px;
+            color: #333;
+        }
+
+        h3 {
+            font-size: 16px;
+        }
+
+        p {
+            margin: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+        }
+
+        .map-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-style: solid;
+            border-width: 1px;
+            border-color: rgba(0, 0, 0, 0.2);
+            margin-left: 20px;
+            font-family: Arial, sans-serif;
+            overflow: auto;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #features {
+            top: 0;
+            height: 120px;
+            margin-top: 20px;
+            width: 300px;
+            z-index: 10;
+        }
+
+        #text-description {
+            max-height: 80px;
+            overflow-y: auto;
+        }
+
+        #legend {
+            padding: 15px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            line-height: 20px;
+            height: auto;
+            max-height: 400px;
+            margin-bottom: 40px;
+            width: 200px;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .legend-entry {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .legend-key {
+            display: inline-block;
+            border-radius: 3px;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .legend-label {
+            font-size: 12px;
+            color: #333;
+        }
+
+        .mapboxgl-canvas-container.mapboxgl-interactive,
+        .mapboxgl-ctrl-group button.mapboxgl-ctrl-compass {
+            cursor: unset;
+        }
+
+        .data-source {
+            font-size: 11px;
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div class='map-overlay' id='features'>
+        <h2>Washington County COVID-19 Vaccination Rates</h2>
+        <div id='text-description'>
+            <p>Hover over a county to see vaccination data</p>
+        </div>
+    </div>
+    <div class='map-overlay' id='legend'></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY295c21heCIsImEiOiJjbWhjeGVxbWQxZjV3MmpwcjlsNGNoc2pkIn0.lN8fMUCO0-cVKDiQW_G7tg';
+
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/light-v10', // style URL
+            zoom: 6.5, // starting zoom
+            center: [-120.5, 47.5] // starting center (Washington state)
+        });
+
+        async function geojsonFetch() {
+            let response = await fetch('assets/wa-covid-data-102521.geojson');
+            let covidData = await response.json();
+
+            map.on('load', function loadingData() {
+                map.addSource('covidData', {
+                    type: 'geojson',
+                    data: covidData
+                });
+
+                map.addLayer({
+                    'id': 'covidData-layer',
+                    'type': 'fill',
+                    'source': 'covidData',
+                    'paint': {
+                        'fill-color': [
+                            'step',
+                            ['get', 'fullyVaxPer10k'],
+                            '#fee5d9',   // lightest - lowest vaccination
+                            2000,        // 20% threshold
+                            '#fcae91',   
+                            3000,        // 30% threshold
+                            '#fb6a4a',   
+                            4000,        // 40% threshold
+                            '#de2d26',   
+                            5000,        // 50% threshold
+                            '#a50f15',   
+                            6000,        // 60% threshold
+                            '#67000d'    // darkest - highest vaccination
+                        ],
+                        'fill-outline-color': '#999',
+                        'fill-opacity': 0.8,
+                    }
+                });
+
+                // Create legend
+                const vaccinationRanges = [
+                    { label: '0-20%', color: '#fee5d9' },
+                    { label: '20-30%', color: '#fcae91' },
+                    { label: '30-40%', color: '#fb6a4a' },
+                    { label: '40-50%', color: '#de2d26' },
+                    { label: '50-60%', color: '#a50f15' },
+                    { label: '60%+', color: '#67000d' }
+                ];
+
+                const legend = document.getElementById('legend');
+                legend.innerHTML = '<div class="legend-title">Fully Vaccinated Rate (%)<br>(as of Oct. 25, 2021)</div>';
+
+                vaccinationRanges.forEach((item) => {
+                    const entry = document.createElement('div');
+                    entry.className = 'legend-entry';
+                    
+                    const key = document.createElement('div');
+                    key.className = 'legend-key';
+                    key.style.backgroundColor = item.color;
+
+                    const label = document.createElement('span');
+                    label.className = 'legend-label';
+                    label.innerHTML = item.label;
+                    
+                    entry.appendChild(key);
+                    entry.appendChild(label);
+                    legend.appendChild(entry);
+                });
+
+                // Add data source information
+                const dataSource = document.createElement('div');
+                dataSource.className = 'data-source';
+                dataSource.innerHTML = '<strong>Data Sources:</strong><br>• COVID-19 data: Washington State Department of Health<br>• Population: WA Office of Financial Management<br>• Boundaries: U.S. Census Bureau';
+                legend.appendChild(dataSource);
+            });
+
+            // Add hover information window
+            map.on('mousemove', ({point}) => {
+                const county = map.queryRenderedFeatures(point, {
+                    layers: ['covidData-layer']
+                });
+                if (county.length > 0) {
+                    const props = county[0].properties;
+                    document.getElementById('text-description').innerHTML = 
+                        `<h3>${props.name} County</h3>
+                         <p><strong>Fully Vaccinated:</strong> ${(props.fullyVaxPer10k / 100).toFixed(1)}%</p>
+                         <p><strong>Cases:</strong> ${(props.casePer10k / 100).toFixed(1)} per 100 people</p>
+                         <p><strong>Deaths:</strong> ${(props.deathPer10k / 100).toFixed(1)} per 100 people</p>`;
+                } else {
+                    document.getElementById('text-description').innerHTML = '<p>Hover over a county to see vaccination data</p>';
+                }
+            });
+        }
+
+        geojsonFetch();
+    </script>
+
+</body>
+
+</html>
