@@ -4,7 +4,7 @@ Some AI was used for coding ideas months ago for a different project for a diffe
 
 ## Project Description
 
-This repository includes two interactive choropleth maps:
+This repository includes two interactive choropleth maps. I chose choropleth maps because I feel they best represent the data for population density and vaccination.:
 
 ### 1. Population Density Map (pop_density.html)
 Visualizes the population density across U.S. states based on population per square mile. The map uses a color gradient from light yellow (low density) to dark red (high density).
