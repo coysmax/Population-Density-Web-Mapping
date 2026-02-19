@@ -1,17 +1,22 @@
 # AI Disclaimer
 
-I used AI in this assignment for some debugging and understanding of the data. I did not use AI to write or complete any components where AI use is prohibited. I am able to explain the relevant code and decisions.
+Some AI was used for programming ideas and debugging throughout this project. I did not use AI to write or complete any components where AI use is prohibited. I am able to explain the relevant code and decisions.
+
 ## Project Description
 
-This repository includes two interactive choropleth maps. I chose choropleth maps because I feel they best represent the data for population density and vaccination.:
+This repository contains an interactive **Smart COVID-19 Vaccination Dashboard** that visualizes Washington State COVID-19 vaccination rates by county using a choropleth map visualization.
 
-### 1. Population Density Map (pop_density.html)
-Visualizes the population density across U.S. states based on population per square mile. The map uses a color gradient from light yellow (low density) to dark red (high density).
+### Why Choropleth Map?
 
-**Data Source:** U.S. Census Bureau
+A choropleth map is the ideal visualization choice for this data because:
+- **Continuous Data Representation**: Vaccination rates are continuous values (0-100%), and choropleth maps excel at showing continuous data distributions across geographic regions
+- **Spatial Pattern Recognition**: Users can instantly identify geographic concentration of vaccination coverage—areas with similar vaccination rates are visually grouped by color intensity
+- **Regional Comparisons**: The color gradient makes it easy to compare vaccination coverage between neighboring counties at a glance
+- **Data Density**: With 39 counties and 1 rate value per county, a choropleth is more efficient than proportional symbols or individual data points
 
-### 2. Washington County COVID-19 Vaccination Rates (index.html)
-Displays the fully vaccinated rates across Washington State counties as of October 25, 2021. The map uses a red color scheme where darker red indicates higher vaccination rates.
+### Washington State COVID-19 Vaccination Rates
+
+Displays fully vaccinated rates across Washington State counties as of October 25, 2021.
 
 **Data Sources:**
 - Vaccination data: Washington State Department of Health
@@ -21,27 +26,44 @@ Displays the fully vaccinated rates across Washington State counties as of Octob
 
 ## Features
 
-Both maps include:
-- **Interactive hover effects**: Display detailed information about each geographic area when hovering
-- **Color-coded choropleth visualization**: Represents data values through color intensity
-- **Informative legend**: Shows the color scale and data ranges
-- **Responsive design**: Works on different screen sizes
-- **Mapbox base layer**: Uses light map style for clear visibility of data
+The dashboard includes:
+- **Interactive Choropleth Map**: Color-coded vaccination rates (0%, 20%, 30%, 40%, 50%, 60%+)
+- **Statistics Panel**: Dynamic county statistics showing total counties, average/max/min vaccination rates
+- **Vaccination Distribution Chart**: Bar chart visualization showing county distribution across vaccination rate brackets
+- **County Information Panel**: Click any county to view detailed vaccination data
+- **Interactive Legend**: Shows vaccination rate ranges and corresponding colors
+- **Responsive Design**: Works on desktop and mobile devices
+- **Loading Indicator**: Visual feedback while data loads
 
+## File Structure
+
+```
+├── index.html          # Main application file
+├── css/
+│   └── style.css       # Dashboard styling
+├── js/
+│   └── main.js         # Core application logic
+├── assets/
+│   └── wa-covid-data-102521.geojson  # Washington County COVID-19 data
+└── README.md
+```
 
 ## How to Access
 
-- **Main map (Vaccination Rates):** https://coysmax.github.io/Population-Density-Web-Mapping/index.html
-- **Population Density Map:** https://coysmax.github.io/Population-Density-Web-Mapping/pop_density.html
+**Live Dashboard:** https://coysmax.github.io/Population-Density-Web-Mapping/
 
-## Map Attributes
+## Technical Stack
 
-### U.S. Population Density Map
-- `name`: State name
-- `density`: Population density (people per square mile)
+- **Mapbox GL JS v2.5.0**: Interactive web mapping with GeoJSON support
+- **Chart.js v3.9.1**: Data visualization for vaccination distribution
+- **Vanilla JavaScript**: ES6+ with async/await for data loading
+- **GeoJSON**: Vector data format for geographic features
 
-### Washington COVID-19 Data Map
+## Map Data Attributes
+
+### Washington County COVID-19 Data
 - `name`: County name
+- `fullyVaxPer10k`: Fully vaccinated people per 10,000 (0-10,000 scale)
 - `casePer10k`: Cumulative COVID-19 cases per 10,000 people
 - `deathPer10k`: Cumulative COVID-19 deaths per 10,000 people
-- `fullyVaxPer10k`: Number of fully vaccinated people per 10,000 people
+
