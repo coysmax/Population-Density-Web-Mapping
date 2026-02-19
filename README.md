@@ -1,7 +1,6 @@
 # AI Disclaimer
 
-Some AI was used for coding ideas months ago for a different project for a different class. I tweaked that project because it fit the requirements for this assignment.
-
+I used AI in this assignment for some debugging and understanding of the data. I did not use AI to write or complete any components where AI use is prohibited. I am able to explain the relevant code and decisions.
 ## Project Description
 
 This repository includes two interactive choropleth maps. I chose choropleth maps because I feel they best represent the data for population density and vaccination.:
