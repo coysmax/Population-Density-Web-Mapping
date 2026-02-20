@@ -20,7 +20,6 @@ Displays fully vaccinated rates across Washington State counties as of October 2
 
 **Data Sources:**
 - Vaccination data: Washington State Department of Health
-- COVID-19 case and death data: The New York Times
 - Population data: Washington State Office of Financial Management
 - Geographic boundaries: U.S. Census Bureau
 
