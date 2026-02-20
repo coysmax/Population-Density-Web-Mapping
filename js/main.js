@@ -70,8 +70,8 @@ function calculateStats() {
     const stats = {
         total: covidData.features.length,
         avg: (vaccinationRates.reduce((a, b) => a + b, 0) / vaccinationRates.length).toFixed(1),
-        max: (Math.max(...vaccinationRates) * 100).toFixed(1),
-        min: (Math.min(...vaccinationRates) * 100).toFixed(1)
+        max: (Math.max(...vaccinationRates)).toFixed(1),
+        min: (Math.min(...vaccinationRates)).toFixed(1)
     };
 
     return stats;
@@ -107,11 +107,11 @@ function createVaccinationChart(features) {
 
     features.forEach(f => {
         const rate = (f.properties.fullyVaxPer10k || 0) / 100;
-        if (rate <= 0.20) vaccinationBuckets['0-20%']++;
-        else if (rate <= 0.30) vaccinationBuckets['20-30%']++;
-        else if (rate <= 0.40) vaccinationBuckets['30-40%']++;
-        else if (rate <= 0.50) vaccinationBuckets['40-50%']++;
-        else if (rate <= 0.60) vaccinationBuckets['50-60%']++;
+        if (rate <= 20) vaccinationBuckets['0-20%']++;
+        else if (rate <= 30) vaccinationBuckets['20-30%']++;
+        else if (rate <= 40) vaccinationBuckets['30-40%']++;
+        else if (rate <= 50) vaccinationBuckets['40-50%']++;
+        else if (rate <= 60) vaccinationBuckets['50-60%']++;
         else vaccinationBuckets['60%+']++;
     });
 
