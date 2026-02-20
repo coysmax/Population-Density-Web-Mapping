@@ -4,7 +4,7 @@ Some AI was used for programming ideas and debugging throughout this project. I 
 
 ## Project Description
 
-This repository contains an interactive **Smart COVID-19 Vaccination Dashboard** that visualizes Washington State COVID-19 vaccination rates by county using a choropleth map visualization.
+This repository contains an interactive **COVID-19 Vaccination Smart Dashboard** that visualizes Washington State COVID-19 vaccination rates by county using a choropleth map visualization.
 
 ### Why Choropleth Map?
 
@@ -20,7 +20,6 @@ Displays fully vaccinated rates across Washington State counties as of October 2
 
 **Data Sources:**
 - Vaccination data: Washington State Department of Health
-- COVID-19 case and death data: The New York Times
 - Population data: Washington State Office of Financial Management
 - Geographic boundaries: U.S. Census Bureau
 
@@ -35,35 +34,6 @@ The dashboard includes:
 - **Responsive Design**: Works on desktop and mobile devices
 - **Loading Indicator**: Visual feedback while data loads
 
-## File Structure
-
-```
-├── index.html          # Main application file
-├── css/
-│   └── style.css       # Dashboard styling
-├── js/
-│   └── main.js         # Core application logic
-├── assets/
-│   └── wa-covid-data-102521.geojson  # Washington County COVID-19 data
-└── README.md
-```
-
 ## How to Access
 
 **Live Dashboard:** https://coysmax.github.io/Population-Density-Web-Mapping/
-
-## Technical Stack
-
-- **Mapbox GL JS v2.5.0**: Interactive web mapping with GeoJSON support
-- **Chart.js v3.9.1**: Data visualization for vaccination distribution
-- **Vanilla JavaScript**: ES6+ with async/await for data loading
-- **GeoJSON**: Vector data format for geographic features
-
-## Map Data Attributes
-
-### Washington County COVID-19 Data
-- `name`: County name
-- `fullyVaxPer10k`: Fully vaccinated people per 10,000 (0-10,000 scale)
-- `casePer10k`: Cumulative COVID-19 cases per 10,000 people
-- `deathPer10k`: Cumulative COVID-19 deaths per 10,000 people
-
